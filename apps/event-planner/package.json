@@ -14,6 +14,8 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@laevento/eslint-config": "*",
+    "@laevento/typescript-config": "*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

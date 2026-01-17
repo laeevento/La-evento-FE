@@ -31,6 +31,32 @@ This Turborepo has some additional tools already setup for you:
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
+- [Husky](https://typicode.github.io/husky/) for Git hooks
+- [lint-staged](https://github.com/lint-staged/lint-staged) for running linters on staged files
+
+### Code Quality
+
+The project uses Husky and lint-staged to automatically run ESLint and Prettier on your code before each commit. This ensures consistent code quality across the entire monorepo.
+
+**What happens on commit:**
+
+1. Husky triggers the pre-commit hook
+2. lint-staged runs ESLint with `--fix` on staged `.js`, `.jsx`, `.ts`, `.tsx`, and `.mjs` files
+3. Prettier formats all staged files
+4. If there are no errors, the commit proceeds
+
+**Manual usage:**
+
+```sh
+# Run lint-staged manually
+yarn lint-staged
+
+# Run ESLint across all workspaces
+yarn lint
+
+# Format all files with Prettier
+yarn format
+```
 
 ### Build
 
