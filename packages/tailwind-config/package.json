@@ -9,6 +9,9 @@
   "sideEffects": [
     "*.css"
   ],
+  "exports": {
+    ".": "./shared-styles.css"
+  },
   "main": "./shared-styles.css",
   "peerDependencies": {
     "tailwindcss": "^4.1.5"

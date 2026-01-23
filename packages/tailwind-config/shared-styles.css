@@ -1,14 +1,52 @@
 /* packages/tailwind-config/shared-styles.css */
+@import "tailwindcss";
 
 /* shared tokens/theme */
 @theme {
-  --color-brand: #2563eb;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --color-primary-50: #e8f7ef;
+  --color-primary-100: #b6e6cc;
+  --color-primary-200: #93d9b4;
+  --color-primary-300: #62c891;
+  --color-primary-400: #43bd7c;
+  --color-primary-500: #14ad5b;
+  --color-primary-600: #129d53;
+  --color-primary-700: #0e7b41;
+  --color-primary-800: #0b5f32;
+  --color-primary-900: #084926;
+  --color-secondary-50: #fff0ed;
+  --color-secondary-100: #ffccc8;
+  --color-secondary-200: #ffb4ad;
+  --color-secondary-300: #ff9c88;
+  --color-secondary-400: #ff7d71;
+  --color-secondary-500: #ff5c4d;
+  --color-secondary-600: #e85446;
+  --color-secondary-700: #b54137;
+  --color-secondary-800: #8c332a;
+  --color-secondary-900: #6b2720;
+  --color-accent-100: #f3edf9;
+  --color-accent-200: #d8c7ef;
+  --color-accent-300: #a173e5;
+  --color-accent-400: #6c3cbf;
+  --color-accent-500: #45247a;
+  --color-white: #ffffff;
+  --color-grey-100: #fafafa;
+  --color-grey-200: #f5f5f5;
+  --color-grey-300: #eaeaea;
+  --color-grey-400: #e5e5e5;
+  --color-grey-500: #d2d2d2;
+  --color-grey-600: #c0c0c0;
+  --color-grey-700: #ababab;
+  --color-grey-800: #7c7c7c;
+  --color-grey-900: #5e5e5e;
+  --color-grey-950: #404040;
+  --color-black: #000000;
 }
 
-.h1{
-  @apply text-6xl
-}
+/* shadcn/ui theme variables */
+@layer base {
+  :root {
+  }
 
+  .dark {
+  }
+}
