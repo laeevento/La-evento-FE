@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 import { tv, type VariantProps } from "tailwind-variants";
+import { ChildrenWithIcon } from "./childrenWithIcon";
 
 export const buttonVariants = tv({
   base: [
@@ -33,7 +34,7 @@ export const buttonVariants = tv({
       ],
       secondary: [
         "border",
-        "border-primary-100",
+        "border-primary-500",
         "text-primary-500",
         "bg-primary-50",
         "hover:bg-primary-100",
@@ -53,11 +54,11 @@ export const buttonVariants = tv({
     size: {
       sm: "py-[0.5rem] px-4 h-[2.5rem]",
       md: "py-[0.625rem] px-4 h-[3rem]",
-      lg: "py-[0.906rem] px-6 h-[3.5rem]",
+      lg: "py-4 px-6 h-[3.5rem]",
     },
     rounded: {
       lg: ["rounded-lg"],
-      full: ["rounded-full"],
+      full: ["rounded-[9999px]"],
     },
     width: {
       fit: ["w-fit"],
@@ -71,7 +72,31 @@ export const buttonVariants = tv({
       true: [],
       false: [],
     },
+    trailingIcon: {
+      true: [],
+      false: [],
+    },
   },
+  compoundVariants: [
+    // Standalone icon
+    {
+      className: "w-8",
+      size: "md",
+      standaloneIcon: true,
+    },
+    // Leading icon
+    {
+      className: "pl-2",
+      size: "md",
+      leadingIcon: true,
+    },
+    // Trailing icon
+    {
+      className: "pr-2",
+      size: "md",
+      trailingIcon: true,
+    },
+  ],
   defaultVariants: {
     variant: "primary",
     size: "lg",
@@ -82,7 +107,7 @@ export const buttonVariants = tv({
 
 type ButtonVariantProps = Omit<
   VariantProps<typeof buttonVariants>,
-  "standaloneIcon" | "leadingIcon"
+  "standaloneIcon" | "leadingIcon" | "trailingIcon"
 >;
 
 export interface ButtonProps
@@ -94,7 +119,8 @@ export interface ButtonProps
   leadingIcon?: React.ReactNode;
   buttonText?: string;
   asChild?: boolean;
-  loading?: boolean;
+  isLoading?: boolean;
+  trailingIcon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -110,6 +136,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       leadingIcon,
       buttonText,
       children,
+      isLoading,
+      trailingIcon,
       ...props
     },
     ref,
@@ -129,7 +157,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
+        {isLoading ? (
+          <ChildrenWithIcon.Loader />
+        ) : (
+          <>
+            {standaloneIcon || leadingIcon ? (
+              <ChildrenWithIcon.Icon>
+                {standaloneIcon || leadingIcon}
+              </ChildrenWithIcon.Icon>
+            ) : null}
+          </>
+        )}
         <Slottable>{buttonText ?? children}</Slottable>
+        {!isLoading && !standaloneIcon && trailingIcon ? (
+          <ChildrenWithIcon.Icon>{trailingIcon}</ChildrenWithIcon.Icon>
+        ) : null}
       </Comp>
     );
   },

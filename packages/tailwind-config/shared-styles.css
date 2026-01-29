@@ -1,52 +1,148 @@
 /* packages/tailwind-config/shared-styles.css */
 @import "tailwindcss";
 
-/* shared tokens/theme */
-@theme {
-  --color-primary-50: #e8f7ef;
-  --color-primary-100: #b6e6cc;
-  --color-primary-200: #93d9b4;
-  --color-primary-300: #62c891;
-  --color-primary-400: #43bd7c;
-  --color-primary-500: #14ad5b;
-  --color-primary-600: #129d53;
-  --color-primary-700: #0e7b41;
-  --color-primary-800: #0b5f32;
-  --color-primary-900: #084926;
-  --color-secondary-50: #fff0ed;
-  --color-secondary-100: #ffccc8;
-  --color-secondary-200: #ffb4ad;
-  --color-secondary-300: #ff9c88;
-  --color-secondary-400: #ff7d71;
-  --color-secondary-500: #ff5c4d;
-  --color-secondary-600: #e85446;
-  --color-secondary-700: #b54137;
-  --color-secondary-800: #8c332a;
-  --color-secondary-900: #6b2720;
-  --color-accent-100: #f3edf9;
-  --color-accent-200: #d8c7ef;
-  --color-accent-300: #a173e5;
-  --color-accent-400: #6c3cbf;
-  --color-accent-500: #45247a;
-  --color-white: #ffffff;
-  --color-grey-100: #fafafa;
-  --color-grey-200: #f5f5f5;
-  --color-grey-300: #eaeaea;
-  --color-grey-400: #e5e5e5;
-  --color-grey-500: #d2d2d2;
-  --color-grey-600: #c0c0c0;
-  --color-grey-700: #ababab;
-  --color-grey-800: #7c7c7c;
-  --color-grey-900: #5e5e5e;
-  --color-grey-950: #404040;
-  --color-black: #000000;
-}
-
-/* shadcn/ui theme variables */
 @layer base {
   :root {
-  }
+    color-scheme: light;
+    --color-primary-50: #e8f7ef;
+    --color-primary-100: #b6e6cc;
+    --color-primary-200: #93d9b4;
+    --color-primary-300: #62c891;
+    --color-primary-400: #43bd7c;
+    --color-primary-500: #14ad5b;
+    --color-primary-600: #129d53;
+    --color-primary-700: #0e7b41;
+    --color-primary-800: #0b5f32;
+    --color-primary-900: #084926;
 
-  .dark {
+    --color-secondary-50: #fff0ed;
+    --color-secondary-100: #ffccc8;
+    --color-secondary-200: #ffb4ad;
+    --color-secondary-300: #ff9c88;
+    --color-secondary-400: #ff7d71;
+    --color-secondary-500: #ff5c4d;
+    --color-secondary-600: #e85446;
+    --color-secondary-700: #b54137;
+    --color-secondary-800: #8c332a;
+    --color-secondary-900: #6b2720;
+
+    --color-accent-100: #f3edf9;
+    --color-accent-200: #d8c7ef;
+    --color-accent-300: #a173e5;
+    --color-accent-400: #6c3cbf;
+    --color-accent-500: #45247a;
+
+    --color-white: #ffffff;
+    --color-grey-100: #fafafa;
+    --color-grey-200: #f5f5f5;
+    --color-grey-300: #eaeaea;
+    --color-grey-400: #e5e5e5;
+    --color-grey-500: #d2d2d2;
+    --color-grey-600: #c0c0c0;
+    --color-grey-700: #ababab;
+    --color-grey-800: #7c7c7c;
+    --color-grey-900: #5e5e5e;
+    --color-grey-950: #404040;
+    --color-black: #222;
   }
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+
+  --color-secondary-50: var(--color-secondary-50);
+  --color-secondary-100: var(--color-secondary-100);
+  --color-secondary-200: var(--color-secondary-200);
+  --color-secondary-300: var(--color-secondary-300);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-secondary-700: var(--color-secondary-700);
+  --color-secondary-800: var(--color-secondary-800);
+  --color-secondary-900: var(--color-secondary-900);
+
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+
+  --color-white: var(--color-white);
+  --color-grey-100: var(--color-grey-100);
+  --color-grey-200: var(--color-grey-200);
+  --color-grey-300: var(--color-grey-300);
+  --color-grey-400: var(--color-grey-400);
+  --color-grey-500: var(--color-grey-500);
+  --color-grey-600: var(--color-grey-600);
+  --color-grey-700: var(--color-grey-700);
+  --color-grey-800: var(--color-grey-800);
+  --color-grey-900: var(--color-grey-900);
+  --color-grey-950: var(--color-grey-950);
+  --color-black: var(--color-black);
+
+  --font-poppins: var(--font-poppins-sans), sans-serif;
+  --font-family-sans:
+    var(--font-poppins-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Logical Colors */
+  --color-background: light-dark(var(--color-white), var(--color-black));
+  --color-foreground: light-dark(var(--color-grey-200), var(--color-grey-100));
+
+  --color-primary: light-dark(
+    var(--color-primary-500),
+    var(--color-primary-400)
+  );
+  --color-primary-foreground: light-dark(
+    var(--color-white),
+    var(--color-black)
+  );
+
+  --color-secondary: light-dark(
+    var(--color-secondary-500),
+    var(--color-secondary-400)
+  );
+  --color-secondary-foreground: light-dark(
+    var(--color-white),
+    var(--color-black)
+  );
+
+  --color-accent: light-dark(var(--color-accent-300), var(--color-accent-200));
+  --color-accent-foreground: light-dark(
+    var(--color-accent-500),
+    var(--color-accent-500)
+  );
+
+  --color-muted: light-dark(var(--color-grey-200), var(--color-grey-900));
+  --color-muted-foreground: light-dark(
+    var(--color-grey-800),
+    var(--color-grey-400)
+  );
+
+  --color-card: light-dark(var(--color-white), var(--color-grey-950));
+  --color-card-foreground: light-dark(
+    var(--color-grey-950),
+    var(--color-grey-100)
+  );
+
+  --color-popover: light-dark(var(--color-white), var(--color-grey-950));
+  --color-popover-foreground: light-dark(
+    var(--color-grey-950),
+    var(--color-grey-100)
+  );
+
+  --color-border: light-dark(var(--color-grey-300), var(--color-grey-800));
+  --color-input: light-dark(var(--color-grey-300), var(--color-grey-800));
+  --color-ring: light-dark(var(--color-primary-500), var(--color-primary-400));
 }

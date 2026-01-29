@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const typography = tv({
-  base: ["font-inter"],
+  base: ["font-poppins"],
   variants: {
     align: {
       left: ["text-left"],
@@ -46,30 +46,42 @@ const typography = tv({
       lg: ["leading-8"],
       normal: ["leading-normal"],
     },
+    tracking: {
+      tighter: "-0.5px",
+      tight: "-0.1px",
+      normal: "0",
+      wide: "0.1px",
+      wider: "0.5px",
+      widest: "1.4px",
+    },
     variant: {
-      primary: ["text-neutral-900"],
-      secondary: ["text-primary-900"],
-      ghost: ["text-neutral-700"],
-      white: ["text-neutral-0"],
-      black: ["text-neutral-950"],
+      primary: ["text-primary"],
+      secondary: ["text-foreground"],
+      ghost: ["text-muted-foreground"],
+      white: ["text-white"],
+      black: ["text-black"],
     },
   },
   defaultVariants: {
     align: "left",
-    variant: "secondary",
+    variant: "black",
     size: "md",
     leading: "base",
+    tracking: "wide",
   },
 });
 
-export interface TypographyProps<T extends React.ElementType = "p">
-  extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof typography> {
+export type TypographyProps<T extends React.ElementType = "p"> = {
   component?: T;
   children?: React.ReactNode;
-}
+} & React.ComponentPropsWithoutRef<T> &
+  VariantProps<typeof typography>;
 
-const Typography = forwardRef<HTMLParagraphElement, TypographyProps>(
-  (props, ref) => {
+const Typography = forwardRef(
+  <T extends React.ElementType = "p">(
+    props: TypographyProps<T>,
+    ref: React.ForwardedRef<any>,
+  ) => {
     const {
       children,
       align,
@@ -105,4 +117,8 @@ const Typography = forwardRef<HTMLParagraphElement, TypographyProps>(
 );
 
 Typography.displayName = "Typography";
-export default Typography;
+
+// Export with the correct polymorphic type signature
+export default Typography as <T extends React.ElementType = "p">(
+  props: TypographyProps<T> & { ref?: React.ComponentPropsWithRef<T>["ref"] },
+) => React.ReactElement;

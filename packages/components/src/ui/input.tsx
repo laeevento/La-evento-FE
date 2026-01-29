@@ -43,8 +43,8 @@ const root = tv({
     "[&>div>textarea:disabled]:placeholder-grey-600",
 
     // Typography
-    "[&>div>input]:font-inter",
-    "[&>div>textarea]:font-inter",
+    "[&>div>input]:font-poppins",
+    "[&>div>textarea]:font-poppins",
   ],
   variants: {
     size: {
@@ -209,7 +209,7 @@ const Field = React.forwardRef(
           {...rest}
         />
         {trailingIcon ? (
-          <div className="absolute top-1/2 right-3 z-10 flex -translate-y-1/2 items-center text-sm text-gray-950 opacity-50">
+          <div className="absolute top-1/2 right-6 z-10 flex -translate-y-1/2 items-center text-sm text-gray-950 opacity-50">
             {trailingIcon}
           </div>
         ) : null}
@@ -235,7 +235,7 @@ const Textarea = React.forwardRef(function Textarea(
 });
 
 const label = tv({
-  base: ["font-inter", "flex", "space-x-1", "tracking-normal"],
+  base: ["font-poppins", "flex", "space-x-1", "tracking-normal"],
 });
 
 type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement> &
@@ -292,7 +292,7 @@ type InfoProps = React.HTMLAttributes<HTMLSpanElement> & {
 function Info(props: InfoProps) {
   const { children, className, ...rest } = props;
   return (
-    <Typography {...rest} size="sm" variant="ghost" className={className}>
+    <Typography {...rest} className={className}>
       {children}
     </Typography>
   );
