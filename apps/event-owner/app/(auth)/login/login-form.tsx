@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, GoogleIcon, Input, Link } from "@laevento/components";
+import { Button, GoogleIcon, Input, Link, Stack } from "@laevento/components";
 import { RiEyeOffLine } from "@remixicon/react";
 
 export function LoginForm() {
@@ -30,12 +30,12 @@ export function LoginForm() {
           />
         </Input.Root>
         <Input.Root>
-          <div className="flex flex-row justify-between items-center mb-1">
+          <Stack className="flex flex-row justify-between items-center mb-1">
             <Input.Label required htmlFor="password">
               Password
             </Input.Label>
-            <Link href="#">Forgot password?</Link>
-          </div>
+            <Link href="/forgot-password">Forgot password?</Link>
+          </Stack>
           <Input.Field
             trailingIcon={
               <button className="cursor-pointer">
