@@ -1,3 +1,5 @@
+"use client";
+
 import { unstable_OneTimePasswordField as OneTimePasswordField } from "radix-ui";
 
 interface OtpInputProps {

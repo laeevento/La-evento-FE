@@ -80,6 +80,7 @@ export type TypographyProps<T extends React.ElementType = "p"> = {
 const Typography = forwardRef(
   <T extends React.ElementType = "p">(
     props: TypographyProps<T>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref: React.ForwardedRef<any>,
   ) => {
     const {

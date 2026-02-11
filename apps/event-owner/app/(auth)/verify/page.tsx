@@ -1,13 +1,18 @@
 import { Button, OtpInput, Stack, Typography } from "@laevento/components";
+import Illustration from "@/assets/verify-illustration.png";
+import Image from "next/image";
 
 const Verify = () => {
   return (
     <Stack className="h-full max-w-127 mx-auto" justify="center" align="center">
+      <Typography className="self-end"> 1/3</Typography>
+      <Image src={Illustration} alt="Verify Illustration" />
       <Typography
         component="h2"
         align="center"
-        className="text-[2rem]"
         weight="medium"
+        size="3xl"
+        className="my-3"
       >
         Verify your phone number
       </Typography>

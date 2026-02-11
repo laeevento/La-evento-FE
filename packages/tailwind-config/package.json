@@ -10,7 +10,8 @@
     "*.css"
   ],
   "exports": {
-    ".": "./shared-styles.css"
+    ".": "./shared-styles.css",
+    "./shared-styles.css": "./shared-styles.css"
   },
   "main": "./shared-styles.css",
   "peerDependencies": {

@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { tv, VariantProps } from "tailwind-variants";
 
@@ -171,6 +173,7 @@ const Root = React.forwardRef(function Root(
     </div>
   );
 });
+Root.displayName = "Root";
 
 type FieldProps = Required<
   Pick<React.InputHTMLAttributes<HTMLInputElement>, "id">
@@ -233,6 +236,7 @@ const Textarea = React.forwardRef(function Textarea(
     </div>
   );
 });
+Textarea.displayName = "Textarea";
 
 const label = tv({
   base: ["font-poppins", "flex", "space-x-1", "tracking-normal"],

@@ -1,3 +1,5 @@
+"use client";
+
 import NextLink from "next/link";
 import React from "react";
 import { cn } from "../lib/utils";

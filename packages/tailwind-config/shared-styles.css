@@ -145,4 +145,7 @@
   --color-border: light-dark(var(--color-grey-300), var(--color-grey-800));
   --color-input: light-dark(var(--color-grey-300), var(--color-grey-800));
   --color-ring: light-dark(var(--color-primary-500), var(--color-primary-400));
+  --shadow-custom-inset:
+    0 14.819px 14.819px 0 rgba(255, 255, 255, 0.12) inset,
+    0 -2.47px 2.47px 0 rgba(48, 48, 48, 0.1) inset;
 }
