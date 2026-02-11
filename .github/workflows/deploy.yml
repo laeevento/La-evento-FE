@@ -23,7 +23,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Lint
-        run: turbo run lint --filter=event-owner
+        run: yarn turbo run lint --filter=event-owner
 
       - name: Deploy Production to Vercel
         uses: amondnet/vercel-action@v25
