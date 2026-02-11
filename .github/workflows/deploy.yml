@@ -36,4 +36,4 @@ jobs:
           vercel-args: "--prod"
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_EVENT_OWNER_PROJECT_ID }}
-          working-directory: ./apps/event-owner
+          working-directory: ./
