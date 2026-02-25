@@ -1,5 +1,0 @@
-@import "@laevento/tailwind-config";
-@import "@laevento/components/styles.css";
-body {
-  font-family: var(--font-poppins-sans), sans-serif;
-}

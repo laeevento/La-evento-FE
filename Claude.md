@@ -4,7 +4,7 @@
 
 **Laevento** is an event management platform built as a Turborepo monorepo. It enables event planners and owners to create, manage, and book events through multiple web applications.
 
-**Repository Type**: Turborepo monorepo with multiple Next.js applications and shared packages  
+**Repository Type**: Turborepo monorepo with multiple applications (TanStack Start, Next.js) and shared packages  
 **Package Manager**: Yarn v1.22.22  
 **Node Version**: >=18  
 **TypeScript**: 5.9.2
@@ -34,20 +34,42 @@ laevento-frontend/
 ### 1. event-owner
 
 **Purpose**: Application for event owners to create and manage their events  
-**Framework**: Next.js 16.1.1 (App Router)  
-**Port**: Default Next.js dev port (3000)  
+**Framework**: TanStack Start (v1.163.1) with TanStack Router (v1.162.9)  
+**Build System**: Vite (v7.3.1) + Nitro (v3.0.1-alpha.2)  
+**Port**: 3000  
 **Key Features**:
 
 - Authentication flow (login, register, forgot password, reset password, verify, KYC)
-- Uses App Router with route groups for auth pages: `app/(auth)/`
+- File-based routing via TanStack Router under `src/routes/`
+- Layout routes using `_auth` prefix pattern
+- SSR with TanStack Query integration (`react-router-ssr-query`)
 - Poppins font family (weights: 100-900)
 
 **Dependencies**:
 
+- `@tanstack/react-start` - Full-stack React framework
+- `@tanstack/react-router` - Type-safe file-based routing
+- `@tanstack/react-query` - Server state management
+- `@tanstack/react-router-ssr-query` - SSR + Query integration
 - `@laevento/components` - Shared component library
 - `@remixicon/react` - Icon library
-- `next`, `react` (19.2.3), `react-dom` (19.2.3)
-- Tailwind CSS v4
+- `react-hook-form` + `@hookform/resolvers` - Form state management
+- `yup` - Schema-based form validation
+- `axios` - HTTP client
+- `react` (19.2.3), `react-dom` (19.2.3)
+- Tailwind CSS v4 (via `@tailwindcss/vite` plugin)
+
+**App-level Folders**:
+
+- `src/routes/` - File-based route definitions (auto-generates `routeTree.gen.ts`)
+- `src/pages/` - Page-level UI components rendered by route files
+- `src/layout/` - Layout components (e.g. `auth.tsx`)
+- `src/components/` - App-specific components
+- `src/hooks/` - Custom React hooks
+- `src/api/` - API layer / HTTP client utilities
+- `src/types/` - Shared TypeScript interfaces and types
+- `src/schemas/` - Yup validation schemas, organised by domain (e.g. `auth.ts`)
+- `src/styles/` - CSS files (imported via `?url` for SSR)
 
 **Auth Routes**:
 
@@ -414,7 +436,7 @@ className = "py-[0.5rem]"; // Arbitrary value
 
 ### Typography
 
-**Font Family**: Poppins (loaded via next/font/google)
+**Font Family**: Poppins (loaded via `@fontsource/poppins`)
 **Weights Available**: 100, 200, 300, 400, 500, 600, 700, 800, 900
 
 **Typography Component**:
@@ -519,8 +541,9 @@ import { ChildrenWithIcon } from "./childrenWithIcon";
 
 - **Components**: PascalCase (e.g., `Button.tsx`, `Typography.tsx`)
 - **Utilities**: camelCase (e.g., `utils.ts`)
-- **Pages**: lowercase (e.g., `page.tsx`, `login/page.tsx`)
-- **Config files**: kebab-case (e.g., `eslint.config.mjs`, `next.config.ts`)
+- **Route files**: lowercase with underscores for layout routes (e.g., `_auth.tsx`, `login.tsx`)
+- **Page components**: kebab-case (e.g., `login.tsx`, `reset-password.tsx`)
+- **Config files**: kebab-case (e.g., `eslint.config.mjs`, `vite.config.ts`)
 - **Type definitions**: PascalCase or camelCase with `.d.ts` (e.g., `types.d.ts`)
 
 ---
@@ -551,69 +574,82 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 
 ---
 
-## Routing (Next.js App Router)
+## Routing (TanStack Router - File-Based)
 
-### Route Groups
+### Route Structure
 
-The event-owner app uses route groups for authentication:
+The event-owner app uses TanStack Router's file-based routing under `src/routes/`:
 
 ```
-app/
-├── page.tsx                    # Home page
-├── layout.tsx                  # Root layout
-└── (auth)/                     # Route group (doesn't affect URL)
-    ├── layout.tsx              # Auth layout
-    ├── login/page.tsx          # /login
-    ├── register/page.tsx       # /register
-    ├── forgot-password/page.tsx # /forgot-password
-    ├── reset-password/page.tsx  # /reset-password
-    ├── verify/page.tsx          # /verify
-    └── kyc/page.tsx             # /kyc
+src/routes/
+├── __root.tsx                  # Root route (HTML shell, providers)
+├── index.tsx                   # Home page (/)
+├── _auth.tsx                   # Auth layout route (pathless)
+└── _auth/                      # Auth child routes
+    ├── login.tsx               # /login
+    ├── register.tsx            # /register
+    ├── forgot-password.tsx     # /forgot-password
+    ├── reset-password.tsx      # /reset-password
+    ├── verify.tsx              # /verify
+    └── kyc.tsx                 # /kyc
 ```
 
-**Route Groups** (folders with parentheses):
+**Route auto-generation**: TanStack Router generates `src/routeTree.gen.ts` automatically from the file structure.
 
-- Don't affect the URL path
-- Allow shared layouts
-- Used for organizing related routes
+**Layout Routes** (files/folders prefixed with `_`):
 
-### Layouts
+- `_auth.tsx` defines a pathless layout route (doesn't add to URL)
+- Child routes in `_auth/` are nested under this layout
+- Layout routes render an `<Outlet />` for child content
 
-**Root Layout** (`app/layout.tsx`):
+### Root Route (`__root.tsx`)
 
-- Configures Poppins font
-- Sets metadata (title, description)
-- Wraps all pages
+- Uses `createRootRouteWithContext` with `QueryClient` context
+- Defines HTML shell via `shellComponent` (head, body, scripts)
+- Configures `<HeadContent />`, `<Scripts />`, and `<TanStackRouterDevtools />`
+- Wraps children in `<QueryClientProvider>`
+- Loads CSS via `?url` import pattern
 
-**Auth Layout** (`app/(auth)/layout.tsx`):
+### Router Configuration (`src/router.tsx`)
 
-- Shared layout for all auth pages
-- Can include auth-specific UI (logo, footer, etc.)
+- Creates router with `createRouter` using the generated `routeTree`
+- Integrates SSR query via `setupRouterSsrQueryIntegration`
+- Enables `scrollRestoration` and `defaultPreload: "intent"`
+- Type-safe: extends `Register` interface for full type inference
+
+### Auth Layout (`_auth.tsx`)
+
+- Maps to `AuthLayout` component from `@/layout/auth`
+- Shared layout for all authentication pages
 
 ---
 
 ## State Management
 
-**Current State**: No global state management library detected
+**Current Stack**:
 
-**Recommended Approach**:
+- **TanStack Query** (`@tanstack/react-query`) - Server state management and caching
+- **TanStack Router** - URL state for routing, search params, and navigation
+- **React Hook Form** - Form state management
+
+**Recommended Additions**:
 
 - React Context for auth state
-- URL state for filters/pagination
-- Server Components for data fetching
-- Client Components for interactivity
+- URL search params (via TanStack Router) for filters/pagination
 
 ---
 
 ## Data Fetching
 
-**Framework**: Next.js App Router (Server Components by default)
+**Framework**: TanStack Query with SSR integration
 
 **Pattern**:
 
-- Server Components: Async components with direct data fetching
-- Client Components: Use "use client" directive
-- No explicit API client library detected yet
+- **TanStack Query** for client-side data fetching, caching, and mutations
+- **SSR Query Integration** (`@tanstack/react-router-ssr-query`) for server-side data prefetching
+- **Axios** (`axios@^1.13.5`) as the HTTP client
+- **API layer**: `src/api/` directory for API utilities and client configuration
+- Route loaders can prefetch data on the server before rendering
 
 ---
 
@@ -624,14 +660,14 @@ app/
 **Usage**:
 
 ```typescript
-// In Next.js components
-process.env.NEXT_PUBLIC_API_URL;
+// Vite exposes env vars prefixed with VITE_
+import.meta.env.VITE_API_URL;
 
-// Server-side only
+// Server-side (Nitro) env vars
 process.env.DATABASE_URL;
 ```
 
-**Note**: No environment variables are currently configured in the visible codebase.
+**Note**: Vite uses `import.meta.env` instead of `process.env` for client-side variables. Variables must be prefixed with `VITE_` to be exposed to client code.
 
 ---
 
@@ -682,7 +718,7 @@ import { GoogleIcon } from "@laevento/components";
 
 ```bash
 # Clear all caches
-rm -rf .next .turbo node_modules/.cache apps/*/.next packages/components/dist
+rm -rf .next .output .tanstack .turbo node_modules/.cache apps/*/.next apps/*/.output packages/components/dist
 
 # Restart dev server
 yarn dev
@@ -728,10 +764,16 @@ yarn dev
 
 ### Event Owner App
 
-- `next@16.1.1` - Next.js framework
+- `@tanstack/react-start@^1.163.1` - Full-stack React framework
+- `@tanstack/react-router@^1.162.9` - File-based routing
+- `@tanstack/react-query@^5.90.21` - Server state management
+- `@tanstack/react-router-ssr-query@^1.162.9` - SSR integration
 - `react@19.2.3` - React library
 - `react-dom@19.2.3` - React DOM
+- `axios@^1.13.5` - HTTP client
 - `@remixicon/react@^4.8.0` - Icons
+- `vite@^7.3.1` - Build tool
+- `nitro@3.0.1-alpha.2` - Server engine
 - `tailwindcss@^4` - Tailwind CSS v4
 
 ---
@@ -763,9 +805,10 @@ yarn generate:component  # Generate new component
 ### Event Owner App
 
 ```bash
-yarn dev           # Start Next.js dev server
-yarn build         # Build for production
-yarn start         # Start production server
+yarn dev           # Start Vite dev server (port 3000)
+yarn build         # Build for production (via Vite + Nitro)
+yarn start         # Start production server (node .output/server/index.mjs)
+yarn preview       # Preview production build
 yarn lint          # Lint app
 ```
 
@@ -796,10 +839,18 @@ yarn lint          # Lint app
 ### Event Owner App
 
 - `/apps/event-owner/package.json`
-- `/apps/event-owner/app/layout.tsx` - Root layout
-- `/apps/event-owner/app/page.tsx` - Home page
-- `/apps/event-owner/app/(auth)/` - Auth pages
-- `/apps/event-owner/next.config.ts` - Next.js config
+- `/apps/event-owner/vite.config.ts` - Vite + TanStack Start + Nitro config
+- `/apps/event-owner/src/routes/__root.tsx` - Root route (HTML shell, providers)
+- `/apps/event-owner/src/routes/index.tsx` - Home page
+- `/apps/event-owner/src/routes/_auth.tsx` - Auth layout route
+- `/apps/event-owner/src/routes/_auth/` - Auth page routes
+- `/apps/event-owner/src/router.tsx` - Router factory with SSR query setup
+- `/apps/event-owner/src/routeTree.gen.ts` - Auto-generated route tree
+- `/apps/event-owner/src/pages/` - Page-level UI components
+- `/apps/event-owner/src/layout/auth.tsx` - Auth layout component
+- `/apps/event-owner/src/api/` - API layer
+- `/apps/event-owner/src/types/index.ts` - Shared TypeScript types
+- `/apps/event-owner/src/schemas/auth.ts` - Auth-related Yup schemas
 - `/apps/event-owner/tsconfig.json` - TypeScript config
 
 ---
@@ -827,7 +878,7 @@ yarn lint          # Lint app
 - AWS Amplify
 
 **Build Command**: `yarn build`  
-**Output**: `.next/` directory in each app
+**Output**: `.next/` for Next.js apps, `.output/` for TanStack Start apps
 
 ---
 
@@ -894,7 +945,29 @@ git commit --no-verify -m "message"
 3. **Add new colors to** `packages/tailwind-config/shared-styles.css`
 4. **Use arbitrary values sparingly**: `className="w-[127px]"`
 
-### When Creating Pages
+### When Creating Pages (event-owner - TanStack Start)
+
+1. **Follow TanStack Router file-based conventions**:
+   - Add route file in `src/routes/` (e.g., `src/routes/_auth/new-page.tsx`)
+   - Create corresponding page component in `src/pages/`
+   - Route tree is auto-generated in `src/routeTree.gen.ts`
+
+2. **Use layout routes** for organization:
+   - `_auth` prefix for auth pages
+   - `_dashboard` prefix for dashboard pages (future)
+
+3. **Route file pattern**:
+
+   ```tsx
+   import { createFileRoute } from "@tanstack/react-router";
+   import MyPage from "@/pages/(auth)/my-page";
+
+   export const Route = createFileRoute("/_auth/my-page")({
+     component: MyPage,
+   });
+   ```
+
+### When Creating Pages (Next.js apps)
 
 1. **Follow App Router conventions**:
    - `page.tsx` for routes
@@ -914,16 +987,17 @@ git commit --no-verify -m "message"
 ### When Debugging
 
 1. **Check dev mode is running**: `yarn dev` should start component watchers
-2. **Clear caches if needed**: `.next`, `.turbo`, `node_modules/.cache`
-3. **Verify TypeScript paths**: `@/*` resolves to app root
+2. **Clear caches if needed**: `.next`, `.output`, `.tanstack`, `.turbo`, `node_modules/.cache`
+3. **Verify TypeScript paths**: `@/*` resolves to `src/` in TanStack Start apps
 4. **Check console for build errors**: Especially in component package
 
 ### File Organization
 
 1. **Components**: One component per file
 2. **Utilities**: Group related utilities
-3. **Types**: Co-locate with components or use shared types file
-4. **Assets**: Use `/public` for static files
+3. **Types**: Place shared types in `types/index.ts` at the app root; import via `@/types`
+4. **Schemas**: Place Yup validation schemas in `schemas/` at the app root, grouped by domain (e.g. `schemas/auth.ts`); import via `@/schemas/auth`
+5. **Assets**: Use `/public` for static files
 
 ### TypeScript
 
@@ -944,7 +1018,7 @@ git commit --no-verify -m "message"
 
 1. Verify `yarn dev` is running in root
 2. Check component package dev watchers are running
-3. Clear `.next` cache in app
+3. Clear `.next` cache (Next.js apps) or `.output`/`.tanstack` cache (TanStack Start apps)
 4. Restart dev server
 
 ### TypeScript Errors
@@ -967,7 +1041,7 @@ git commit --no-verify -m "message"
 1. Verify `@laevento/tailwind-config/shared-styles.css` is imported
 2. Check class names for typos
 3. Ensure using Tailwind v4 syntax (no config file)
-4. Clear `.next` cache
+4. Clear `.next` cache (Next.js) or `.output` cache (TanStack Start)
 
 ### Build Failures
 
@@ -986,7 +1060,12 @@ git commit --no-verify -m "message"
 
 ### Documentation
 
-- Next.js App Router: https://nextjs.org/docs
+- TanStack Start: https://tanstack.com/start/latest
+- TanStack Router: https://tanstack.com/router/latest
+- TanStack Query: https://tanstack.com/query/latest
+- Next.js App Router: https://nextjs.org/docs (for event-planner, website)
+- Vite: https://vite.dev
+- Nitro: https://nitro.build
 - Tailwind CSS v4: https://tailwindcss.com/docs
 - shadcn/ui: https://ui.shadcn.com
 - Turborepo: https://turbo.build/repo/docs
@@ -1025,11 +1104,13 @@ git commit --no-verify -m "message"
 
 ## Version History
 
-**Last Updated**: February 2, 2026  
+**Last Updated**: February 25, 2026  
 **Project Version**: 0.1.0 (development)  
-**Next.js Version**: 16.1.1  
+**event-owner Framework**: TanStack Start 1.163.1 + TanStack Router 1.162.9  
+**event-planner / website Framework**: Next.js 16.1.1  
 **React Version**: 19.2.3  
-**Tailwind CSS**: v4
+**Tailwind CSS**: v4  
+**Vite**: 7.3.1
 
 ---
 

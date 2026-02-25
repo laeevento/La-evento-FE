@@ -2,29 +2,43 @@
   "name": "event-owner",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs",
+    "preview": "vite preview",
     "lint": "eslint"
   },
   "dependencies": {
+    "@fontsource/poppins": "^5.2.6",
+    "@hookform/resolvers": "^5.2.2",
     "@laevento/components": "*",
     "@remixicon/react": "^4.8.0",
-    "next": "16.1.1",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-router": "^1.162.9",
+    "@tanstack/react-router-devtools": "^1.162.9",
+    "@tanstack/react-router-ssr-query": "^1.162.9",
+    "@tanstack/react-start": "^1.163.1",
+    "axios": "^1.13.5",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.1",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@laevento/eslint-config": "*",
     "@laevento/typescript-config": "*",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^9",
-    "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "nitro": "3.0.1-alpha.2",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

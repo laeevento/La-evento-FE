@@ -209,8 +209,8 @@ function SelectItem({
       data-slot="select-item"
       className={cn(
         "flex w-full cursor-default select-none items-center",
-        "px-4 py-[14px]",
-        "h-[49px]",
+        "px-4 py-3.5",
+        "h-12.25",
         "rounded-xl",
         "bg-white",
         "hover:bg-[#E8F7EF]",
